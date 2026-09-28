@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Game – Host</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── SCREEN 1: Host Setup ─────────────────────── -->
+<div id="screen-setup" class="screen active">
+  <div class="card">
+    <div class="logo">Quiz<span>Buzz</span></div>
+    <p class="subtitle">Host a new quiz room</p>
+    <div id="setup-msg" class="msg"></div>
+    <div class="input-group">
+      <label for="host-name">Your name</label>
+      <input type="text" id="host-name" placeholder="e.g. Mr. Smith" maxlength="30" />
+    </div>
+    <button class="btn btn-primary" onclick="createRoom()">🎮 Create Room</button>
+  </div>
+</div>
+
+<!-- ── SCREEN 2: Lobby (waiting for players) ──────── -->
+<div id="screen-lobby" class="screen">
+  <div class="card card-wide">
+    <div class="logo">Quiz<span>Buzz</span></div>
+    <p class="subtitle">Share the PIN or QR code – then start when ready</p>
+
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center;">
+      <!-- Left: PIN + QR -->
+      <div style="flex:1; min-width:220px; max-width:280px;">
+        <div class="pin-box">
+          <div class="pin-label">Room PIN</div>
+          <div id="pin-display" class="pin-value">------</div>
+        </div>
+        <div class="qr-wrap">
+          <img id="qr-img" src="" alt="QR Code" />
+          <div id="qr-url" class="qr-url"></div>
+        </div>
+      </div>
+
+      <!-- Right: Players + controls -->
+      <div style="flex:1; min-width:220px;">
+        <p class="player-count">Players joined: <strong id="player-count">0</strong></p>
+        <ul id="player-list" class="player-list"></ul>
+        <hr class="divider" />
+        <div id="lobby-msg" class="msg"></div>
+        <button id="btn-start" class="btn btn-green" onclick="startGame()" disabled>
+          ▶ Start Quiz
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN 3: Question (host view) ─────────────── -->
+<div id="screen-question" class="screen">
+  <div class="card card-wide">
+    <div class="question-header">
+      <span id="h-q-number" class="q-number">Q 1 / 10</span>
+      <span id="h-q-timer" class="q-timer">20</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div id="h-progress" class="progress-bar" style="width:0%"></div>
+    </div>
+    <p id="h-question-text" class="question-text"></p>
+    <div id="h-options" class="options-grid"></div>
+    <div id="h-answered" class="answered-bar" style="margin-top:1rem;"></div>
+
+    <!-- Live mini-leaderboard -->
+    <hr class="divider" />
+    <h3 style="margin-bottom:.75rem; font-size:1rem; color:var(--muted);">Live Scores</h3>
+    <ul id="h-live-lb" class="leaderboard"></ul>
+
+    <button class="btn btn-secondary" onclick="hostNext()" style="margin-top:1rem;">
+      ⏭ Next Question
+    </button>
+  </div>
+</div>
+
+<!-- ── SCREEN 4: Question results (host) ─────────── -->
+<div id="screen-qresults" class="screen">
+  <div class="card card-wide">
+    <h2 style="margin-bottom:.5rem; text-align:center;">Question Results</h2>
+    <p id="h-correct-ans" style="text-align:center; color:var(--green); font-size:1.1rem; margin-bottom:1rem;"></p>
+    <ul id="h-results-lb" class="leaderboard"></ul>
+    <p style="text-align:center; color:var(--muted); margin-top:1rem; font-size:.9rem;">
+      Auto-advancing in <span id="h-countdown">5</span>s…
+    </p>
+    <button class="btn btn-secondary" onclick="hostNext()" style="margin-top:1rem;">
+      ⏭ Next Question Now
+    </button>
+  </div>
+</div>
+
+<!-- ── SCREEN 5: Final results (host) ────────────── -->
+<div id="screen-final" class="screen">
+  <div class="card card-wide">
+    <div class="trophy">🏆</div>
+    <h1 style="text-align:center; margin-bottom:.25rem;">Game Over!</h1>
+    <p class="subtitle">Final Leaderboard</p>
+    <ul id="h-final-lb" class="leaderboard"></ul>
+    <button class="btn btn-primary" onclick="location.reload()" style="margin-top:1.5rem;">
+      🔄 Play Again
+    </button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/host.js"></script>
+</body>
+</html>

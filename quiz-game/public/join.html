@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Game – Join</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── SCREEN 1: Enter PIN + Name ──────────────────── -->
+<div id="screen-join" class="screen active">
+  <div class="card">
+    <div class="logo">Quiz<span>Buzz</span></div>
+    <p class="subtitle">Enter the 6-digit PIN to join</p>
+
+    <div id="join-msg" class="msg"></div>
+
+    <div class="input-group">
+      <label for="pin-input">Room PIN</label>
+      <input
+        type="number"
+        id="pin-input"
+        class="pin-input"
+        placeholder="000000"
+        maxlength="6"
+        inputmode="numeric"
+        oninput="this.value = this.value.slice(0,6)"
+      />
+    </div>
+
+    <div class="input-group">
+      <label for="player-name">Your name</label>
+      <input type="text" id="player-name" placeholder="e.g. Alex" maxlength="24" />
+    </div>
+
+    <button class="btn btn-primary" onclick="joinRoom()">🚀 Join Game</button>
+
+    <hr class="divider" />
+    <p style="text-align:center; color:var(--muted); font-size:.85rem; margin-bottom:.75rem;">
+      Or scan the QR code shown on the host screen
+    </p>
+    <p style="text-align:center; font-size:.75rem; color:var(--muted);">
+      Scanning fills the PIN automatically — just add your name and tap Join.
+    </p>
+  </div>
+</div>
+
+<!-- ── SCREEN 2: Lobby – waiting for host to start ── -->
+<div id="screen-lobby" class="screen">
+  <div class="card">
+    <div class="logo">Quiz<span>Buzz</span></div>
+    <p class="subtitle">You're in! Waiting for the host…</p>
+    <div class="spinner"></div>
+    <p style="text-align:center; color:var(--muted); margin-top:.5rem;">
+      Room PIN: <strong id="p-pin-display" style="color:var(--accent);">------</strong>
+    </p>
+    <p style="text-align:center; margin-top:.5rem;">
+      Playing as: <strong id="p-name-display"></strong>
+    </p>
+    <p style="text-align:center; color:var(--muted); font-size:.85rem; margin-top:1rem;">
+      Get ready — the quiz will start soon!
+    </p>
+  </div>
+</div>
+
+<!-- ── SCREEN 3: Question ──────────────────────────── -->
+<div id="screen-question" class="screen">
+  <div class="card">
+    <div class="question-header">
+      <span id="p-q-number" class="q-number">Q 1 / 10</span>
+      <span id="p-q-timer" class="q-timer">20</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div id="p-progress" class="progress-bar" style="width:0%"></div>
+    </div>
+    <p id="p-question-text" class="question-text"></p>
+    <div id="p-options" class="options-grid"></div>
+    <div class="score-badge" id="p-score-display">Score: 0</div>
+  </div>
+</div>
+
+<!-- ── SCREEN 4: Answer result ─────────────────────── -->
+<div id="screen-answer-result" class="screen">
+  <div class="card">
+    <div id="p-result-banner" class="result-banner">
+      <h2 id="p-result-title"></h2>
+      <p  id="p-result-sub"></p>
+    </div>
+    <p style="text-align:center; color:var(--muted); font-size:.9rem;">
+      Correct answer: <strong id="p-correct-ans" style="color:var(--green);"></strong>
+    </p>
+    <hr class="divider" />
+    <h3 style="margin-bottom:.75rem; font-size:1rem; color:var(--muted);">Leaderboard</h3>
+    <ul id="p-result-lb" class="leaderboard"></ul>
+    <p style="text-align:center; color:var(--muted); margin-top:1rem; font-size:.85rem;">
+      Next question coming up…
+    </p>
+  </div>
+</div>
+
+<!-- ── SCREEN 5: Already answered – waiting ────────── -->
+<div id="screen-waiting" class="screen">
+  <div class="card">
+    <div class="spinner"></div>
+    <h2 style="text-align:center; margin-top:.5rem;">Answer submitted!</h2>
+    <p style="text-align:center; color:var(--muted); margin-top:.5rem;">
+      Waiting for other players…
+    </p>
+    <div class="score-badge" id="p-waiting-score" style="display:block; text-align:center; margin-top:1rem;"></div>
+  </div>
+</div>
+
+<!-- ── SCREEN 6: Final results ─────────────────────── -->
+<div id="screen-final" class="screen">
+  <div class="card">
+    <div class="trophy">🏆</div>
+    <h1 style="text-align:center; margin-bottom:.25rem;">Quiz Over!</h1>
+    <p class="subtitle">Final Leaderboard</p>
+    <ul id="p-final-lb" class="leaderboard"></ul>
+    <div style="text-align:center; margin-top:1rem;">
+      <span class="score-badge" id="p-final-score"></span>
+    </div>
+    <button class="btn btn-primary" onclick="location.href='/join.html'" style="margin-top:1.5rem;">
+      🔄 Play Again
+    </button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/participant.js"></script>
+</body>
+</html>
